@@ -40,10 +40,27 @@ class SpellingQuizService(
         )
     }
 
-    // 사용자가 정답을 제출하면 저장하는 메서드
+    // 사용자가 정답을 제출하면 저장 또는 업데이트하는 메서드 (upsert)
     fun submitAnswer(user: Profile, request: SpellingQuizAnswerRequestDTO): SpellingQuizAnswerResponseDTO {
         val quiz = spellingQuizRepository.findById(request.quiz_id.toLong())
             .orElseThrow { IllegalArgumentException("Invalid quiz_id") }
+
+        // 이미 동일한 퀴즈에 대한 답변이 존재하는지 확인
+        val existingAnswerNote = spellingAnswerNoteRepository.findByUserAndQuiz(user, quiz)
+
+        if (existingAnswerNote != null) {
+            // 이미 존재하는 답이 있다면 업데이트 처리
+            existingAnswerNote.answer = request.user_choice
+            spellingAnswerNoteRepository.save(existingAnswerNote)
+        } else {
+            // 새로운 답을 저장
+            val newAnswerNote = SpellingAnswerNote(
+                user = user,
+                quiz = quiz,
+                answer = request.user_choice
+            )
+            spellingAnswerNoteRepository.save(newAnswerNote)
+        }
 
         // 퀴즈의 정답이 몇 번째 인덱스인지 파악
         val correctAnswerIndex = quiz.answer ?: throw IllegalStateException("Correct answer is missing")
@@ -53,15 +70,8 @@ class SpellingQuizService(
 
         // 정답을 맞췄다면 XP 증가
         if (isCorrect) {
-            profileService.increaseXp(user, score = 1)  // 맞출 경우 10 XP 증가
+            profileService.increaseXp(user, score = 1)  // 맞출 경우 1 XP 증가
         }
-        // 사용자가 선택한 답을 저장
-        val answerNote = SpellingAnswerNote(
-            user = user,
-            quiz = quiz,
-            answer = request.user_choice
-        )
-        spellingAnswerNoteRepository.save(answerNote)  // 데이터베이스에 저장
 
         return SpellingQuizAnswerResponseDTO(
             answer = correctAnswerIndex,
