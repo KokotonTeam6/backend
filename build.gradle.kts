@@ -36,6 +36,13 @@ dependencies {
 	testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
 	testImplementation("org.springframework.security:spring-security-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api
+	implementation("io.jsonwebtoken:jjwt-api:0.12.6")
+	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-impl
+	implementation("io.jsonwebtoken:jjwt-impl:0.12.6")
+
+
 }
 
 kotlin {
