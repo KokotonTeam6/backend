@@ -29,8 +29,8 @@ data class SpellingAnswerNote(
     var quiz: SpellingQuiz? = null,
 
     // Answer for the spelling quiz
-    @Column(nullable = false)
-    var answer: Short = 0, // Assuming the range of the answer is suitable for SmallInt (Short in Kotlin)
+    @Column(nullable = false, columnDefinition = "SMALLINT")
+    var answer: Int? = 0, // Assuming the range of the answer is suitable for SmallInt (Short in Kotlin)
 
     // Date and time the answer was created
     @Column(nullable = false)

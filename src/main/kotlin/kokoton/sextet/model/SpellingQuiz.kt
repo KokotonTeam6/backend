@@ -20,6 +20,6 @@ data class SpellingQuiz(
     @Column(nullable=false, columnDefinition = "VARCHAR(255)")
     var options: String? = null,
 
-    @Column(nullable=false, columnDefinition = "TINYINT")
+    @Column(nullable=false, columnDefinition = "SMALLINT")
     var answer: Int? = null,
 )

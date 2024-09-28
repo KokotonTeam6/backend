@@ -59,7 +59,7 @@ class SpellingQuizService(
         val answerNote = SpellingAnswerNote(
             user = user,
             quiz = quiz,
-            answer = request.user_choice.toShort()
+            answer = request.user_choice
         )
         spellingAnswerNoteRepository.save(answerNote)  // 데이터베이스에 저장
 
