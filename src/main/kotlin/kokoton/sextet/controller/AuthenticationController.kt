@@ -2,10 +2,12 @@ package kokoton.sextet.controller
 
 import kokoton.sextet.dto.LoginRequestDTO
 import kokoton.sextet.dto.LoginResponseDTO
+import kokoton.sextet.dto.ProfileResponseDTO
 import kokoton.sextet.dto.RegisterRequestDTO
 import kokoton.sextet.model.Profile
 import kokoton.sextet.model.ProfileRepository
 import kokoton.sextet.util.JwtUtil
+import kokoton.sextet.util.getCurrentUser
 import kokoton.sextet.util.hashWithSHA256
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -60,5 +63,19 @@ class AuthenticationService(
         profileRepository.save(user)
 
         return ResponseEntity.ok("SUCCESS")
+    }
+
+    @GetMapping("/profile")
+    fun profile(): ResponseEntity<ProfileResponseDTO> {
+        val user = getCurrentUser()
+
+        return ResponseEntity.ok(ProfileResponseDTO(
+            user.id!!,
+            user.username!!,
+            user.nickname!!,
+            user.profileUrl!!,
+            user.xp,
+            user.point
+        ))
     }
 }
