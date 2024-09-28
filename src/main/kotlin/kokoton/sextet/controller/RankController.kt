@@ -39,11 +39,11 @@ class RankController(
     // 랭킹 리스트를 페이지네이션하여 가져오는 API
     @GetMapping("/list")
     fun getRankList(
-        @RequestParam page: Int,  // 요청된 페이지 번호
-        @RequestParam size: Int = 10  // 기본 페이지 사이즈는 10
+        @RequestParam page: Int?,  // 요청된 페이지 번호. 기본은 1
+        @RequestParam size: Int?  // 기본 페이지 사이즈는 10
     ): ResponseEntity<RankListResponseDTO> {
         return try {
-            val rankList = rankService.getRankList(page, size)
+            val rankList = rankService.getRankList(page ?: 1, size ?: 10)
             ResponseEntity.ok(rankList)
         } catch (e: Exception) {
             ResponseEntity.status(500).build()

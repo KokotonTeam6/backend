@@ -22,7 +22,7 @@ class WrongNoteController(
             val user = getCurrentUser()
 
             // count가 null이면 50으로 처리
-            val notes = wrongNoteService.getWrongNotes(user.id ?: 0L, count ?: 50)
+            val notes = wrongNoteService.getWrongNotes(user.id ?: 0L, count ?: 30)
             ResponseEntity.ok(notes)
         } catch (e: IllegalArgumentException) {
             ResponseEntity.badRequest().body(
