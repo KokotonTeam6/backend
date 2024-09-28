@@ -3,13 +3,15 @@ package kokoton.sextet.controller
 import kokoton.sextet.dto.ErrorResponseDTO
 import kokoton.sextet.dto.SpellingQuizAnswerRequestDTO
 import kokoton.sextet.service.SpellingQuizService
+import kokoton.sextet.util.getCurrentUser
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/v1/quiz")
 class SpellingQuizController(
-    private val spellingQuizService: SpellingQuizService
+    @Autowired private val spellingQuizService: SpellingQuizService
 ) {
 
     @GetMapping
@@ -49,8 +51,9 @@ class SpellingQuizController(
                     ErrorResponseDTO("유효한 퀴즈 id, user_choice을 전송해주세요.", 400)
                 )
             } else {
+                val user = getCurrentUser()
                 // 정답 확인 로직 호출
-                val response = spellingQuizService.checkAnswer(request)
+                val response = spellingQuizService.submitAnswer(user, request)
                 ResponseEntity.ok(response)
             }
         } catch (e: IllegalArgumentException) {

@@ -3,13 +3,19 @@ package kokoton.sextet.service
 import kokoton.sextet.dto.SpellingQuizAnswerRequestDTO
 import kokoton.sextet.dto.SpellingQuizAnswerResponseDTO
 import kokoton.sextet.dto.SpellingQuizResponseDTO
+import kokoton.sextet.model.Profile  // Profile import 추가
+import kokoton.sextet.model.SpellingAnswerNote  // SpellingAnswerNote import 추가
+import kokoton.sextet.model.SpellingAnswerNoteRepository  // SpellingAnswerNoteRepository import 추가
 import kokoton.sextet.model.SpellingQuiz
 import kokoton.sextet.model.SpellingQuizRepository
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
 class SpellingQuizService(
-    private val spellingQuizRepository: SpellingQuizRepository
+    @Autowired private val spellingQuizRepository: SpellingQuizRepository,
+    @Autowired private val spellingAnswerNoteRepository: SpellingAnswerNoteRepository  // repository 주입
+
 ) {
 
     // 특정 퀴즈를 가져오는 메서드
@@ -34,8 +40,8 @@ class SpellingQuizService(
         )
     }
 
-    // 정답 채점 메서드
-    fun checkAnswer(request: SpellingQuizAnswerRequestDTO): SpellingQuizAnswerResponseDTO {
+    // 사용자가 정답을 제출하면 저장하는 메서드
+    fun submitAnswer(user: Profile, request: SpellingQuizAnswerRequestDTO): SpellingQuizAnswerResponseDTO {
         val quiz = spellingQuizRepository.findById(request.quiz_id.toLong())
             .orElseThrow { IllegalArgumentException("Invalid quiz_id") }
 
@@ -44,6 +50,14 @@ class SpellingQuizService(
 
         // 사용자가 선택한 답이 정답인지 확인
         val isCorrect = (request.user_choice == correctAnswerIndex)
+
+        // 사용자가 선택한 답을 저장
+        val answerNote = SpellingAnswerNote(
+            user = user,
+            quiz = quiz,
+            answer = request.user_choice.toShort()
+        )
+        spellingAnswerNoteRepository.save(answerNote)  // 데이터베이스에 저장
 
         return SpellingQuizAnswerResponseDTO(
             answer = correctAnswerIndex,
