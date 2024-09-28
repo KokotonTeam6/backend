@@ -5,7 +5,10 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.OneToOne
 import jakarta.persistence.Table
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "streak")
@@ -22,5 +25,5 @@ data class Streak(
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")  // 외래 키 컬럼 이름을 "user_id"로 명시
-    var profile: Profile  // 1:1 관계 설정
+    var profile: Profile? = null  // 1:1 관계 설정
 )

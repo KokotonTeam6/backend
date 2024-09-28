@@ -24,9 +24,9 @@ data class SpellingAnswerNote(
     var user: Profile? = null,
 
     // Many-to-One relationship with SpellingQuiz
-    //@ManyToOne(fetch = FetchType.EAGER)
-    //@JoinColumn(name = "quiz_id", nullable = false) // Foreign key to SpellingQuiz table
-    //var quiz: SpellingQuiz? = null,
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "quiz_id", nullable = false) // Foreign key to SpellingQuiz table
+    var quiz: SpellingQuiz? = null,
 
     // Answer for the spelling quiz
     @Column(nullable = false)
