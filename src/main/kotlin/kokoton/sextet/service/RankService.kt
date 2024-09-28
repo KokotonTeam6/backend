@@ -32,13 +32,20 @@ class RankService(
         return RankPercentResponseDTO(rank_percent = rankPercent)
     }
 
-    // 랭킹 리스트를 페이지별로 가져오는 메서드
     fun getRankList(page: Int, size: Int): RankListResponseDTO {
         // PageRequest를 생성하여 페이지와 페이지 당 사이즈 설정
         val pageable = PageRequest.of(page - 1, size)  // 페이지는 0부터 시작하므로 -1 처리
 
         // 데이터베이스에서 페이지 단위로 프로필 목록 가져오기
         val profilePage = profileRepository.findAllByOrderByXpDesc(pageable)
+
+        // 페이지가 유효하지 않으면 빈 결과 반환
+        if (profilePage.isEmpty) {
+            return RankListResponseDTO(
+                page = page,
+                users = emptyList()
+            )
+        }
 
         // 사용자 순위 목록 생성
         val userRanks = profilePage.content.mapIndexed { index, profile ->
@@ -54,4 +61,5 @@ class RankService(
             users = userRanks
         )
     }
+
 }
