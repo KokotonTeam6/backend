@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/rank")
+@RequestMapping("/v1/rank")
 class RankController(
     @Autowired private val rankService: RankService
 ) {
