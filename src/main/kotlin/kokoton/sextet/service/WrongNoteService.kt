@@ -16,7 +16,7 @@ class WrongNoteService(
         // 사용자가 제출한 답변 중 오답만 찾기, 최신순으로 정렬
         val wrongNotes: List<SpellingAnswerNote> = spellingAnswerNoteRepository.findAllByUserId(userId)
             .filter { note: SpellingAnswerNote -> note.answer != note.quiz?.answer }
-            .sortedByDescending { note: SpellingAnswerNote -> note.createdAt }
+            .sortedByDescending { note: SpellingAnswerNote -> note.updatedAt }
             .take(count)
 
         // 오답노트 리스트 변환

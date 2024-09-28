@@ -34,5 +34,10 @@ data class SpellingAnswerNote(
 
     // Date and time the answer was created
     @Column(nullable = false)
-    var createdAt: LocalDateTime = LocalDateTime.now()
+    var createdAt: LocalDateTime = LocalDateTime.now(),
+
+    // Date and time the answer was created
+    @Column(nullable = false)
+    var updatedAt: LocalDateTime = LocalDateTime.now()
+
 )

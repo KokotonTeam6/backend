@@ -10,6 +10,7 @@ import kokoton.sextet.model.SpellingQuiz
 import kokoton.sextet.model.SpellingQuizRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class SpellingQuizService(
@@ -49,18 +50,22 @@ class SpellingQuizService(
         val existingAnswerNote = spellingAnswerNoteRepository.findByUserAndQuiz(user, quiz)
 
         if (existingAnswerNote != null) {
-            // 이미 존재하는 답이 있다면 업데이트 처리
+            // 이미 존재하는 답이 있다면 업데이트 처리 및 updatedAt 갱신
             existingAnswerNote.answer = request.user_choice
+            existingAnswerNote.updatedAt = LocalDateTime.now()  // 업데이트 시점의 시간으로 설정
             spellingAnswerNoteRepository.save(existingAnswerNote)
         } else {
-            // 새로운 답을 저장
+            // 새로운 답을 저장 (createdAt과 updatedAt 모두 현재 시간으로 설정)
             val newAnswerNote = SpellingAnswerNote(
                 user = user,
                 quiz = quiz,
-                answer = request.user_choice
+                answer = request.user_choice,
+                createdAt = LocalDateTime.now(),  // 생성 시간
+                updatedAt = LocalDateTime.now()   // 업데이트 시간
             )
             spellingAnswerNoteRepository.save(newAnswerNote)
         }
+
 
         // 퀴즈의 정답이 몇 번째 인덱스인지 파악
         val correctAnswerIndex = quiz.answer ?: throw IllegalStateException("Correct answer is missing")
