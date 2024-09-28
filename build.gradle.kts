@@ -30,6 +30,9 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
+
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
+
 	runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
@@ -41,6 +44,9 @@ dependencies {
 	implementation("io.jsonwebtoken:jjwt-api:0.12.6")
 	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-impl
 	implementation("io.jsonwebtoken:jjwt-impl:0.12.6")
+	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-gson
+	implementation("io.jsonwebtoken:jjwt-gson:0.12.6")
+
 
 
 }

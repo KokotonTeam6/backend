@@ -12,11 +12,11 @@ import java.time.LocalDateTime
 @Table(name = "profile")
 data class Profile(
     @Id
-    @GeneratedValue(GenerationType.IDENTITY)
-    var idx: Int? = null,
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null,
 
     @Column(nullable=false, columnDefinition = "VARCHAR(26)")
-    var id: String? = null,
+    var username: String? = null,
 
     @Column(nullable=false, columnDefinition = "VARCHAR(255)")
     var password: String? = null,
@@ -25,7 +25,7 @@ data class Profile(
     var nickname: String? = null,
 
     @Column(nullable=false, columnDefinition = "VARCHAR(2048)")
-    var profileUrl: String? = null,
+    var profileUrl: String? = "",
 
     @Column(nullable=false)
     var xp: Int = 0,
@@ -34,8 +34,8 @@ data class Profile(
     var point: Int = 0,
 
     @Column(nullable=false)
-    var createdAt: LocalDateTime? = null,
+    var createdAt: LocalDateTime? = LocalDateTime.now(),
 
     @Column(nullable=false)
-    var updatedAt: LocalDateTime? = null,
+    var updatedAt: LocalDateTime? = LocalDateTime.now(),
 )

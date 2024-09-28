@@ -1,9 +1,13 @@
 package kokoton.sextet.util
 
+import io.jsonwebtoken.Claims
+import io.jsonwebtoken.Header
+import io.jsonwebtoken.Jwt
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import kokoton.sextet.model.Profile
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 import java.util.Date
 import java.util.UUID
@@ -15,13 +19,15 @@ class JwtUtil(
 ) {
     private val parser = Jwts.parser().setSigningKey(key).build()
 
-    fun generateToken(user: Profile): String {
+    fun generateToken(user: Profile, extraClaims: MutableMap<String, String>): String {
         val now = Date()
 
+        extraClaims["nickname"] = user.nickname.toString()
+
         return Jwts.builder()
-            .setSubject(user.id!!)
+            .setSubject(user.username)
             .setHeader(createHeader())
-            .setClaims(createClaims(user))
+            .setClaims(extraClaims)
             .setIssuedAt(now)
             .setExpiration(Date(now.time + exp))
             .signWith(SignatureAlgorithm.HS256, key)
@@ -39,19 +45,14 @@ class JwtUtil(
         return header
     }
 
-    private fun createClaims(user: Profile): Map<String, Any> {
-        val claims = HashMap<String, Any>()
-        claims["sub"] = user.id!!
-        claims["username"] = user.nickname!!
-
-        return claims
+    fun getClaims(token: String): Jwt<Header, Claims>? {
+        return parser.parseClaimsJwt(token)
     }
 
-    fun getClaims(token: String): Map<String, Any> {
-        return parser.parseClaimsJwt(token).body
-    }
+    fun isTokenValid(body: Jwt<Header, Claims>, user: UserDetails): Boolean {
+        val username = body.body.subject
+        val expires = body.body.expiration
 
-    fun getUsername(value: Map<String, Any>): String {
-        return value["username"] as String
+        return (username == user.username) && expires.before(Date())
     }
 }
