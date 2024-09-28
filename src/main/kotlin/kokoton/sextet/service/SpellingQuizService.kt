@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service
 @Service
 class SpellingQuizService(
     @Autowired private val spellingQuizRepository: SpellingQuizRepository,
-    @Autowired private val spellingAnswerNoteRepository: SpellingAnswerNoteRepository  // repository 주입
-
+    @Autowired private val spellingAnswerNoteRepository: SpellingAnswerNoteRepository,  // repository 주입
+    @Autowired private val profileService: ProfileService
 ) {
 
     // 특정 퀴즈를 가져오는 메서드
@@ -51,6 +51,10 @@ class SpellingQuizService(
         // 사용자가 선택한 답이 정답인지 확인
         val isCorrect = (request.user_choice == correctAnswerIndex)
 
+        // 정답을 맞췄다면 XP 증가
+        if (isCorrect) {
+            profileService.increaseXp(user, score = 1)  // 맞출 경우 10 XP 증가
+        }
         // 사용자가 선택한 답을 저장
         val answerNote = SpellingAnswerNote(
             user = user,
