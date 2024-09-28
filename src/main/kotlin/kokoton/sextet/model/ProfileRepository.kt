@@ -13,6 +13,10 @@ interface ProfileRepository : JpaRepository<Profile, Long> {
     fun findByUsername(username: String): Profile?
 
     // 경험치 내림차순으로 프로필 목록을 페이지네이션 처리해서 가져옴
+    @Query("SELECT p FROM Profile p ORDER BY p.xp ASC")
+    fun findAllByOrderByXpAsc(pageable: Pageable): Page<Profile>
+
+    // 경험치 내림차순으로 프로필 목록을 페이지네이션 처리해서 가져옴
     @Query("SELECT p FROM Profile p ORDER BY p.xp DESC")
     fun findAllByOrderByXpDesc(pageable: Pageable): Page<Profile>
 }

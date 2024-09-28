@@ -4,19 +4,20 @@ import kokoton.sextet.dto.RankListResponseDTO
 import kokoton.sextet.dto.RankPercentResponseDTO
 import kokoton.sextet.dto.UserRankDTO
 import kokoton.sextet.model.ProfileRepository
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.data.domain.Pageable
 
 @Service
 class RankService(
-    private val profileRepository: ProfileRepository
+    @Autowired private val profileRepository: ProfileRepository
 ) {
 
     // 상위 몇 퍼센트인지 계산하는 메서드
     fun getUserRankPercent(userId: Long): RankPercentResponseDTO {
         // 모든 유저를 경험치 내림차순으로 가져오기
-        val allProfiles = profileRepository.findAllByOrderByXpDesc(Pageable.unpaged())
+        val allProfiles = profileRepository.findAllByOrderByXpAsc(Pageable.unpaged())
 
         // 전체 유저 수
         val totalUsers = allProfiles.size.toDouble()
