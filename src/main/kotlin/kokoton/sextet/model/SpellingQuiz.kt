@@ -18,7 +18,7 @@ data class SpellingQuiz(
     var question: String? = null,
 
     @Column(nullable=false, columnDefinition = "VARCHAR(255)")
-    var option: String? = null,
+    var options: String? = null,
 
     @Column(nullable=false, columnDefinition = "TINYINT")
     var answer: Int? = null,
