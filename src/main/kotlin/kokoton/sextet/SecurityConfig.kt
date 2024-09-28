@@ -13,6 +13,9 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.DefaultSecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+import org.springframework.web.filter.CorsFilter
 
 @Configuration
 @EnableWebSecurity
@@ -29,7 +32,8 @@ class SecurityConfig(
         http
             .httpBasic { it.disable() }
             .csrf { it.disable() }
-            .authorizeRequests {
+            .cors { }
+            .authorizeHttpRequests {
                 it.requestMatchers(
                     "/swagger-ui.html",
                     "/swagger-ui/**",
@@ -55,4 +59,17 @@ class SecurityConfig(
             .passwordEncoder(passwordEncoder)
             .and()
             .build()
+
+    @Bean
+    fun corsFilter(): CorsFilter {
+        val source = UrlBasedCorsConfigurationSource()
+        val config = CorsConfiguration()
+        config.allowedOriginPatterns = listOf("*")
+        config.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
+        config.allowedHeaders = listOf("*")
+        config.allowCredentials = true
+        source.registerCorsConfiguration("/**", config)
+        return CorsFilter(source)
+    }
+
 }
