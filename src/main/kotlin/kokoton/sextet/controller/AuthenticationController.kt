@@ -41,6 +41,8 @@ class AuthenticationService(
         }
 
         val user = profileRepository.findByUsername(login.id)
+
+        println(user)
         val token = jwtUtil.generateToken(user!!, mutableMapOf())
 
         return ResponseEntity.ok(LoginResponseDTO(login.id, token))

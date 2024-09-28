@@ -11,7 +11,7 @@ import jakarta.persistence.Table
 import java.time.LocalDateTime
 
 @Entity
-@Table(name = "streak")
+@Table(name = "attendance_log")
 data class AttendanceLog(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
