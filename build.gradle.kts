@@ -47,7 +47,12 @@ dependencies {
 	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-gson
 	implementation("io.jsonwebtoken:jjwt-gson:0.12.6")
 
+	// https://mvnrepository.com/artifact/com.aallam.openai/openai-client
+	implementation("com.aallam.openai:openai-client:3.8.2")
+	// https://mvnrepository.com/artifact/io.ktor/ktor-client-okhttp-jvm
+	runtimeOnly("io.ktor:ktor-client-okhttp-jvm:2.3.12")
 
+	implementation("io.github.cdimascio:dotenv-kotlin:6.4.2")
 
 }
 
