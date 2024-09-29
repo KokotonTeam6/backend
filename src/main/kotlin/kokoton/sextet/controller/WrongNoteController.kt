@@ -1,6 +1,7 @@
 package kokoton.sextet.controller
 
-import kokoton.sextet.dto.ErrorResponseDTO
+import kokoton.sextet.SpellingException
+import kokoton.sextet.dto.WrongNoteResponseDTO
 import kokoton.sextet.service.WrongNoteService
 import kokoton.sextet.util.getCurrentUser
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,21 +18,17 @@ class WrongNoteController(
     @GetMapping
     fun getWrongNotes(
         @RequestParam count: Int?  // nullable로 받음
-    ): ResponseEntity<Any> {
+    ): ResponseEntity<List<WrongNoteResponseDTO>> {
         return try {
             val user = getCurrentUser()
 
             // count가 null이면 50으로 처리
             val notes = wrongNoteService.getWrongNotes(user.id ?: 0L, count ?: 30)
-            ResponseEntity.ok(notes)
+            return ResponseEntity.ok(notes)
         } catch (e: IllegalArgumentException) {
-            ResponseEntity.badRequest().body(
-                ErrorResponseDTO(message = "유효한 요청이 아닙니다.", errorCode = 400)
-            )
+            throw SpellingException("유효한 요청이 아닙니다.", 400)
         } catch (e: Exception) {
-            ResponseEntity.status(500).body(
-                ErrorResponseDTO(message = "DB 처리 중 에러가 발생했습니다.", errorCode = 500)
-            )
+            throw SpellingException(message = "DB 처리 중 에러가 발생했습니다.", 500)
         }
     }
 
