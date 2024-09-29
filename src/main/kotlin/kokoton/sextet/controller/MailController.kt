@@ -48,6 +48,7 @@ class MailController(
                     "당신은 해당 이메일을 받는 교수입니다.\n" +
                     "당신은 교수에게 어떻게 이메일을 쓰면 좋을지 교육하기 위해 학생들에게서 이메일을 받고\n" +
                     "그것을 분석해 100점 만점으로 성적을 매기고자 합니다.\n" +
+                    "학생의 이메일을 분석한 분석결과와 최종 점수를 텍스트 형식으로 반환하십시오.\n" +
                     "단 최종 점수의 양식은 `최종 점수: n점/100점` 형식으로 주어져야 합니다.\n" +
                     "다음의 이메일을 확인하십시오."
                 ),
@@ -69,6 +70,7 @@ class MailController(
                 user = getCurrentUser(),
                 emailTitle = request.title,
                 emailContent = request.content,
+                output = response,
                 score = score
             )
             emailingProfessorRepository.save(dataset)
@@ -76,6 +78,7 @@ class MailController(
             return@runBlocking ResponseEntity.ok(EmailingProfessorResponseDTO(
                 request.title,
                 request.content,
+                response,
                 score.toInt()
             ))
         }

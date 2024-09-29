@@ -31,6 +31,9 @@ data class EmailingProfessor(
     @Column(nullable = false, columnDefinition = "TEXT")
     var emailContent: String = "",
 
+    @Column(nullable = false, columnDefinition = "TEXT")
+    var output: String = "",
+
     // Score associated with the email
     @Column(nullable = false)
     var score: Short = 0, // Assuming the range of the score is suitable for SmallInt (Short in Kotlin)

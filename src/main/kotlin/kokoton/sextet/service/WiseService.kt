@@ -19,7 +19,7 @@ class WiseService(
         val yesterday = today.minusDays(1)
 
         val candidates = wiseRepository.findAll().filter {
-            it.lastShown?.toLocalDate() != yesterday
+            it.lastShown?.toLocalDate()!! < yesterday
         }
 
         val newWise = candidates.randomOrNull() ?: throw RuntimeException("No available wise to select")
